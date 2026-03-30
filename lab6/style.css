@@ -6,6 +6,7 @@ body {
     margin: 0;
     font-family: "Segoe UI", sans-serif;
 
+    /* аніме фон */
     background: linear-gradient(
         135deg,
         #1e1b4b,
@@ -143,6 +144,7 @@ button:hover {
     transform: scale(1.1);
 }
 
+/* увімкнена лампа */
 
 .cell.on {
     background: radial-gradient(
@@ -157,6 +159,7 @@ button:hover {
         inset 0 0 10px white;
 }
 
+/* вимкнена */
 
 .cell.off {
     background: #0f172a;
