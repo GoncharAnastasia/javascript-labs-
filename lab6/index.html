@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab6 - Lights Out</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Lights Out</h1>
+        <p class="subtitle">Laboratory work No6</p>
+
+        <div class="top-panel">
+            <label for="levelSelect">Choose level:</label>
+            <select id="levelSelect">
+                <option value="a">Level A</option>
+                <option value="b">Level B</option>
+                <option value="c">Level C</option>
+            </select>
+
+            <button id="loadLevelBtn">Load level</button>
+            <button id="restartBtn">Restart</button>
+        </div>
+
+        <div class="info-panel">
+            <p>Moves: <span id="movesCount">0</span></p>
+            <p>Minimum steps: <span id="minSteps">-</span></p>
+        </div>
+
+        <div id="gameBoard" class="board"></div>
+
+        <div id="message" class="message"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
