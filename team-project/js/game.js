@@ -32,6 +32,8 @@ const player = {
   speed: 7
 };
 
+// IMAGES
+
 const backgroundImg = new Image();
 backgroundImg.src = "images/game/background.png";
 
@@ -59,6 +61,8 @@ kunaiImg.src = "images/game/kunai.png";
 const heartImg = new Image();
 heartImg.src = "images/game/heart.png";
 
+// KEYBOARD
+
 document.addEventListener("keydown", (event) => {
   keys[event.key] = true;
 });
@@ -67,10 +71,10 @@ document.addEventListener("keyup", (event) => {
   keys[event.key] = false;
 });
 
+// BUTTONS
+
 startBtn.addEventListener("click", () => {
-  if (gameOver) {
-    resetGame();
-  }
+  if (gameOver) resetGame();
 
   if (!gameRunning) {
     gameRunning = true;
@@ -85,49 +89,39 @@ pauseBtn.addEventListener("click", () => {
 
 if (fullscreenBtn && gameSection) {
   fullscreenBtn.addEventListener("click", () => {
-    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-      if (gameSection.requestFullscreen) {
-        gameSection.requestFullscreen();
-      } else if (gameSection.webkitRequestFullscreen) {
-        gameSection.webkitRequestFullscreen();
-      }
+    gameSection.classList.toggle("custom-fullscreen");
 
+    if (gameSection.classList.contains("custom-fullscreen")) {
       fullscreenBtn.textContent = "Exit full";
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      }
-
       fullscreenBtn.textContent = "Full screen";
+      canvas.width = 800;
+      canvas.height = 400;
     }
+
+    player.y = canvas.height - 90;
+    player.x = canvas.width / 2 - player.width / 2;
   });
 }
 
-function resizeGameCanvas() {
-  if (document.fullscreenElement || document.webkitFullscreenElement) {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  } else {
+// ESC вихід
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && gameSection.classList.contains("custom-fullscreen")) {
+    gameSection.classList.remove("custom-fullscreen");
+    fullscreenBtn.textContent = "Full screen";
+
     canvas.width = 800;
     canvas.height = 400;
+
+    player.y = canvas.height - 90;
+    player.x = canvas.width / 2 - player.width / 2;
   }
+});
 
-  player.y = canvas.height - 90;
-
-  if (player.x + player.width > canvas.width) {
-    player.x = canvas.width - player.width;
-  }
-
-  if (player.x < 0) {
-    player.x = 0;
-  }
-}
-
-document.addEventListener("fullscreenchange", resizeGameCanvas);
-document.addEventListener("webkitfullscreenchange", resizeGameCanvas);
-window.addEventListener("resize", resizeGameCanvas);
+// SPAWN
 
 function spawnItem() {
   const types = ["coin", "ramen", "mana", "scroll", "shuriken", "kunai"];
@@ -135,17 +129,9 @@ function spawnItem() {
 
   let size = 45;
 
-  if (type === "coin") {
-    size = 36;
-  }
-
-  if (type === "shuriken") {
-    size = 70;
-  }
-
-  if (type === "kunai") {
-    size = 75;
-  }
+  if (type === "coin") size = 36;
+  if (type === "shuriken") size = 70;
+  if (type === "kunai") size = 75;
 
   items.push({
     x: Math.random() * (canvas.width - size),
@@ -168,6 +154,8 @@ function stopSpawning() {
   spawnTimer = null;
 }
 
+// DIFFICULTY
+
 setInterval(() => {
   if (gameRunning && !gameOver) {
     fallSpeed += 0.2;
@@ -179,6 +167,8 @@ setInterval(() => {
     }
   }
 }, 8000);
+
+// RESET
 
 function resetGame() {
   score = 0;
@@ -193,23 +183,15 @@ function resetGame() {
   player.y = canvas.height - 90;
 }
 
+// UPDATE
+
 function update() {
-  if (!gameRunning || gameOver) {
-    return;
-  }
+  if (!gameRunning || gameOver) return;
 
-  if (keys["ArrowLeft"] || keys["a"]) {
-    player.x -= player.speed;
-  }
+  if (keys["ArrowLeft"] || keys["a"]) player.x -= player.speed;
+  if (keys["ArrowRight"] || keys["d"]) player.x += player.speed;
 
-  if (keys["ArrowRight"] || keys["d"]) {
-    player.x += player.speed;
-  }
-
-  if (player.x < 0) {
-    player.x = 0;
-  }
-
+  if (player.x < 0) player.x = 0;
   if (player.x + player.width > canvas.width) {
     player.x = canvas.width - player.width;
   }
@@ -232,7 +214,6 @@ function update() {
     lives = 0;
     gameOver = true;
     gameRunning = false;
-
     stopSpawning();
 
     if (score > record) {
@@ -241,6 +222,8 @@ function update() {
     }
   }
 }
+
+// COLLISION
 
 function isColliding(a, b) {
   return (
@@ -252,18 +235,14 @@ function isColliding(a, b) {
 }
 
 function handleItemCollision(item) {
-  if (item.type === "coin") {
-    score += 10;
-  } else if (item.type === "ramen") {
-    score += 20;
-  } else if (item.type === "mana") {
-    score += 30;
-  } else if (item.type === "scroll") {
-    score += 50;
-  } else if (item.type === "shuriken" || item.type === "kunai") {
-    lives -= 1;
-  }
+  if (item.type === "coin") score += 10;
+  else if (item.type === "ramen") score += 20;
+  else if (item.type === "mana") score += 30;
+  else if (item.type === "scroll") score += 50;
+  else if (item.type === "shuriken" || item.type === "kunai") lives -= 1;
 }
+
+// DRAW
 
 function drawBackground() {
   if (backgroundImg.complete) {
@@ -280,26 +259,18 @@ function drawPlayer() {
 
 function drawItems() {
   items.forEach(item => {
-    if (item.type === "coin") {
-      ctx.drawImage(coinImg, item.x, item.y, item.width, item.height);
-    } else if (item.type === "ramen") {
-      ctx.drawImage(ramenImg, item.x, item.y, item.width, item.height);
-    } else if (item.type === "mana") {
-      ctx.drawImage(manaImg, item.x, item.y, item.width, item.height);
-    } else if (item.type === "scroll") {
-      ctx.drawImage(scrollImg, item.x, item.y, item.width, item.height);
-    } else if (item.type === "shuriken") {
-      ctx.drawImage(shurikenImg, item.x, item.y, item.width, item.height);
-    } else if (item.type === "kunai") {
-      ctx.drawImage(kunaiImg, item.x, item.y, item.width, item.height);
-    }
+    if (item.type === "coin") ctx.drawImage(coinImg, item.x, item.y, item.width, item.height);
+    else if (item.type === "ramen") ctx.drawImage(ramenImg, item.x, item.y, item.width, item.height);
+    else if (item.type === "mana") ctx.drawImage(manaImg, item.x, item.y, item.width, item.height);
+    else if (item.type === "scroll") ctx.drawImage(scrollImg, item.x, item.y, item.width, item.height);
+    else if (item.type === "shuriken") ctx.drawImage(shurikenImg, item.x, item.y, item.width, item.height);
+    else if (item.type === "kunai") ctx.drawImage(kunaiImg, item.x, item.y, item.width, item.height);
   });
 }
 
 function drawUI() {
   ctx.fillStyle = "white";
   ctx.font = "20px Poppins";
-  ctx.textAlign = "start";
 
   ctx.fillText("Score: " + score, 20, 30);
   ctx.fillText("Record: " + record, 20, 60);
@@ -317,7 +288,6 @@ function drawUI() {
     ctx.textAlign = "center";
 
     ctx.fillText("Press Start", canvas.width / 2, canvas.height / 2);
-
     ctx.textAlign = "start";
   }
 
@@ -332,7 +302,6 @@ function drawUI() {
     ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2 - 20);
 
     ctx.font = "22px Poppins";
-
     ctx.fillText("Final Score: " + score, canvas.width / 2, canvas.height / 2 + 20);
     ctx.fillText("Record: " + record, canvas.width / 2, canvas.height / 2 + 50);
     ctx.fillText("Press Start to play again", canvas.width / 2, canvas.height / 2 + 85);
@@ -343,7 +312,6 @@ function drawUI() {
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
   drawBackground();
   drawPlayer();
   drawItems();
@@ -353,32 +321,7 @@ function draw() {
 function gameLoop() {
   update();
   draw();
-
   requestAnimationFrame(gameLoop);
 }
 
 gameLoop();
-
-function resizeGameCanvas() {
-  if (document.fullscreenElement || document.webkitFullscreenElement) {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  } else {
-    canvas.width = 800;
-    canvas.height = 400;
-  }
-
-  player.y = canvas.height - 90;
-
-  if (player.x + player.width > canvas.width) {
-    player.x = canvas.width - player.width;
-  }
-
-  if (player.x < 0) {
-    player.x = 0;
-  }
-}
-
-document.addEventListener("fullscreenchange", resizeGameCanvas);
-document.addEventListener("webkitfullscreenchange", resizeGameCanvas);
-window.addEventListener("resize", resizeGameCanvas);
