@@ -358,3 +358,27 @@ function gameLoop() {
 }
 
 gameLoop();
+
+function resizeGameCanvas() {
+  if (document.fullscreenElement || document.webkitFullscreenElement) {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  } else {
+    canvas.width = 800;
+    canvas.height = 400;
+  }
+
+  player.y = canvas.height - 90;
+
+  if (player.x + player.width > canvas.width) {
+    player.x = canvas.width - player.width;
+  }
+
+  if (player.x < 0) {
+    player.x = 0;
+  }
+}
+
+document.addEventListener("fullscreenchange", resizeGameCanvas);
+document.addEventListener("webkitfullscreenchange", resizeGameCanvas);
+window.addEventListener("resize", resizeGameCanvas);
