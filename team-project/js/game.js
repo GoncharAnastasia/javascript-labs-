@@ -456,3 +456,15 @@ requestAnimationFrame(gameLoop);
 }
 
 gameLoop();
+
+document.addEventListener("fullscreenchange", () => {
+  const canvas = document.getElementById("gameCanvas");
+
+  if (document.fullscreenElement) {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  } else {
+    canvas.width = 800;  // поверни свій стандартний розмір
+    canvas.height = 400;
+  }
+});
