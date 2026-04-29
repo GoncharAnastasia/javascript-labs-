@@ -50,3 +50,42 @@ background:#ff1f1f;
   border:none !important;
   border-radius:0 !important;
 }
+
+#game.custom-fullscreen{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100vw;
+  height:100vh;
+  background:#000;
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+#game.custom-fullscreen h2{
+  display:none;
+}
+
+#game.custom-fullscreen #game-container{
+  width:100vw;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+#game.custom-fullscreen .game-controls{
+  position:absolute;
+  top:15px;
+  left:50%;
+  transform:translateX(-50%);
+}
+
+#game.custom-fullscreen #gameCanvas{
+  width:100vw;
+  height:100vh;
+  border:none;
+  border-radius:0;
+}
