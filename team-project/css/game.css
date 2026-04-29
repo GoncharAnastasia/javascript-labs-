@@ -16,3 +16,37 @@ cursor:pointer;
 .game-controls button:hover{
 background:#ff1f1f;
 }
+
+#game:fullscreen{
+  width:100vw !important;
+  height:100vh !important;
+  padding:0 !important;
+  margin:0 !important;
+  background:#000 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+
+#game:fullscreen #game-container{
+  width:100vw !important;
+  height:100vh !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+
+#game:fullscreen h2,
+#game:fullscreen .game-controls{
+  display:none !important;
+}
+
+#game:fullscreen #gameCanvas{
+  width:100vw !important;
+  height:100vh !important;
+  max-width:100vw !important;
+  max-height:100vh !important;
+  border:none !important;
+  border-radius:0 !important;
+}
